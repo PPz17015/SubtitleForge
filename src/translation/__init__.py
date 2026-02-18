@@ -1,0 +1,1 @@
+# SubtitleForge Pro - Translation Module

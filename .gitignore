@@ -1,0 +1,93 @@
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+*.whl
+
+# ============================================
+# Build / Distribution (PyInstaller, etc.)
+# ============================================
+dist/
+build/
+*.spec
+*.exe
+*.dll
+*.pyd
+
+# ============================================
+# Virtual Environment
+# ============================================
+venv/
+.venv/
+env/
+
+# ============================================
+# IDE / Editor
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# ============================================
+# OS
+# ============================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ============================================
+# SubtitleForge Pro — App specific
+# ============================================
+# Logs
+*.log
+subtitleforge.log
+
+# Checkpoint files (auto-generated during processing)
+*.checkpoint.json
+
+# Generated subtitles (output files)
+*.srt
+*.vtt
+*.ass
+
+# Extracted audio (temporary)
+*.wav
+*.mp3
+*.flac
+
+# Video files (large, should not be in git)
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.webm
+
+# Ruff cache & lint artifacts
+.ruff_cache/
+ruff_errors.json
+
+# Pytest cache
+.pytest_cache/
+
+# MyPy cache
+.mypy_cache/
+
+# Whisper model cache
+whisper_models/
+
+# Environment variables
+.env
+.env.local
+
+# Misc
+nul

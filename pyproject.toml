@@ -1,0 +1,132 @@
+[project]
+name = "subtitleforge-pro"
+version = "1.0.0"
+description = "Professional offline subtitle generation with speaker diarization and context-aware translation"
+requires-python = ">=3.9"
+
+# ============================================================================
+# MYPY — Type Checker Configuration
+# ============================================================================
+# Catches: wrong attribute names, missing Optional, type mismatches
+# Run: mypy src/ plugins/
+# ============================================================================
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = true
+disallow_untyped_defs = false          # Too strict for existing codebase
+disallow_incomplete_defs = true
+no_implicit_optional = true            # Catches `param: str = None` → forces Optional[str]
+strict_equality = true
+show_error_codes = true
+show_column_numbers = true
+
+# Per-module overrides for third-party libraries without stubs
+[[tool.mypy.overrides]]
+module = [
+    "faster_whisper.*",
+    "pyannote.*",
+    "google.genai.*",
+    "ffmpeg.*",
+    "srt.*",
+    "pysrt.*",
+    "webvtt.*",
+    "torch.*",
+    "rich.*",
+    "click.*",
+    "uvicorn.*",
+]
+ignore_missing_imports = true
+
+# Stricter rules for core modules (where bugs were found)
+[[tool.mypy.overrides]]
+module = [
+    "core.models",
+    "core.subtitle_generator",
+    "api.models",
+    "api.routes",
+    "api.websocket",
+]
+disallow_untyped_defs = true
+warn_return_any = true
+strict_equality = true
+
+# ============================================================================
+# RUFF — Linter Configuration
+# ============================================================================
+# Catches: deprecated API, unused imports, shadow built-ins, type hints
+# Run: ruff check src/ plugins/ tests/
+# Fix: ruff check --fix src/ plugins/ tests/
+# ============================================================================
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+src = ["src", "plugins", "tests"]
+
+[tool.ruff.lint]
+select = [
+    # --- Core rules (prevent bugs we found) ---
+    "E",        # pycodestyle errors
+    "W",        # pycodestyle warnings
+    "F",        # pyflakes (unused imports, undefined names)
+    "I",        # isort (import ordering)
+    "UP",       # pyupgrade (deprecated syntax/API detection)
+    "B",        # bugbear (common bugs, e.g. mutable default args)
+    "A",        # flake8-builtins (shadow built-in names like `format`)
+    "T20",      # flake8-print (print statements in production code)
+    "SIM",      # flake8-simplify (simplifiable code)
+    "PIE",      # flake8-pie (misc improvements)
+    "RET",      # flake8-return (return statement issues)
+    "C4",       # flake8-comprehensions (unnecessary list/dict calls)
+    "TCH",      # flake8-type-checking (type-only imports)
+    "PLC",      # pylint convention
+    "PLE",      # pylint error
+    "PLW",      # pylint warning
+]
+ignore = [
+    "E501",     # Line too long — handled by formatter
+    "E402",     # Module-level import not at top — intentional (sys.path before imports)
+    "T201",     # print() — OK in CLI app
+    "B008",     # Function call in default arg — OK for FastAPI Depends()
+    "RET504",   # Unnecessary assignment before return — preference
+    "PLW0603",  # Global statement — needed in some places
+    "UP007",    # Use X | Y for union — not available in Python 3.9
+    "PLC0415",  # `import` inside function — intentional lazy imports for heavy deps
+    "PLW2901",  # Loop variable overwritten — idiomatic strip + clean pattern
+    "B027",     # Empty method in ABC — intentional default no-op for plugins
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow print() in CLI and GUI
+"src/main.py" = ["T201"]
+"src/gui.py" = ["T201"]
+# Allow shadow built-ins in tests (e.g. `input`)
+"tests/*" = ["A", "T201"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["core", "api", "transcription", "translation", "diarization", "config"]
+
+# ============================================================================
+# PYTEST — Test Configuration
+# ============================================================================
+# Run: pytest
+# Coverage: pytest --cov=src --cov-report=term-missing
+# ============================================================================
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "api: marks tests as API tests",
+]

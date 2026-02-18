@@ -1,0 +1,51 @@
+# SubtitleForge Pro - Requirements
+
+# Core Processing
+ffmpeg-python>=0.2.0
+faster-whisper>=1.0.0
+
+# Speaker Diarization
+pyannote.audio>=3.0.0
+pyannote.pipeline>=3.0.0
+
+# Translation
+google-genai>=1.0.0
+
+# UI (optional, for desktop version)
+# pyqt6>=6.5.0
+
+# Utilities
+tqdm>=4.66.0
+srt>=3.5.0
+pysrt>=1.1.10
+webvtt-py>=0.5.1
+
+# Configuration
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# CLI
+click>=8.1.0
+rich>=13.0.0
+
+# Data handling
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Development
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Type Checking & Linting
+mypy>=1.8.0
+ruff>=0.2.0
+
+# Test Client (required by FastAPI TestClient)
+httpx>=0.25.0
+
+# REST API Server
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+pydantic>=2.5.0
+pydantic-settings>=2.1.0

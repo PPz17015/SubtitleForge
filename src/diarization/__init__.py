@@ -1,0 +1,1 @@
+# SubtitleForge Pro - Diarization Module
