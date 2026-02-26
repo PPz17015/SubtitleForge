@@ -944,7 +944,6 @@ class MainWindow(QMainWindow):
         }
         QPushButton:disabled {
             background-color: #94A3B8;
-            cursor: not-allowed;
         }
         QComboBox {
             padding: 10px 12px;

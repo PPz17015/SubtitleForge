@@ -17,7 +17,7 @@ google-genai>=1.0.0
 # Utilities
 tqdm>=4.66.0
 srt>=3.5.0
-pysrt>=1.1.10
+pysrt>=1.1.2
 webvtt-py>=0.5.1
 
 # Configuration
