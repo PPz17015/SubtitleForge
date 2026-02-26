@@ -12,7 +12,7 @@ class TranslationConfig:
     use_gemini: bool = True
     gemini_api_key: Optional[str] = None
     use_context_aware: bool = True
-    batch_size: int = 40
+    batch_size: int = 50
 
 
 class TranslationEngine:
@@ -20,9 +20,9 @@ class TranslationEngine:
         self.config = config or TranslationConfig()
         self.gemini_client = None
         self._max_retries = 5
-        self._base_interval = 1.0   # Base rate limit: ~60 RPM (Tier 1 allows 300)
-        self._min_interval = 1.0    # Current interval (adaptive)
-        self._max_interval = 8.0    # Max backoff interval
+        self._base_interval = 0.15  # Base rate limit: ~400 RPM (Tier 1 allows 300)
+        self._min_interval = 0.15   # Current interval (adaptive)
+        self._max_interval = 4.0    # Max backoff interval
         self._last_call_time = 0
         self._consecutive_429s = 0  # Track consecutive rate limits
         self._progress_callback = progress_callback
@@ -65,12 +65,12 @@ class TranslationEngine:
                     contents=prompt
                 )
 
-                # Success — gradually recover interval
+                # Success — quickly recover interval
                 self._consecutive_429s = 0
                 if self._min_interval > self._base_interval:
                     self._min_interval = max(
                         self._base_interval,
-                        self._min_interval * 0.8  # Recover 20% per success
+                        self._min_interval * 0.5  # Recover 50% per success
                     )
 
                 return response.text.strip()
@@ -86,7 +86,7 @@ class TranslationEngine:
                     )
 
                 if attempt < self._max_retries - 1:
-                    wait = (2 ** attempt) * (8 if is_rate_limit else 3)
+                    wait = (2 ** attempt) * (4 if is_rate_limit else 2)
                     logger.warning(
                         f"Gemini call failed (attempt {attempt+1}/{self._max_retries}), "
                         f"retry in {wait}s (interval={self._min_interval:.1f}s): {e}"
@@ -792,7 +792,7 @@ class TranslationQualityChecker:
         self.gemini_client = None
         self.gemini_api_key = gemini_api_key
         self._max_retries = 3
-        self._min_interval = 1.0  # Rate limit: match TranslationEngine
+        self._min_interval = 0.15  # Rate limit: match TranslationEngine
         self._last_call_time = 0
         if gemini_api_key:
             self._init_gemini()
@@ -826,7 +826,7 @@ class TranslationQualityChecker:
                 is_rate_limit = "429" in str(e) or "quota" in str(e).lower()
 
                 if attempt < self._max_retries - 1:
-                    wait = (2 ** attempt) * (10 if is_rate_limit else 5)
+                    wait = (2 ** attempt) * (4 if is_rate_limit else 2)
                     logger.warning(f"Gemini quality check failed (attempt {attempt+1}), retry in {wait}s: {e}")
                     time.sleep(wait)
                 else:

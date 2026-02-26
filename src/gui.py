@@ -142,7 +142,8 @@ class ProcessingThread(QThread):
                     )
                 self._check_cancelled()
 
-                # Stage 4: Quality check
+                # Stage 4: Final quality verification
+                # Even after self-check corrects issues, run a final pass to confirm
                 if self.settings.quality_check:
                     if self._is_stage_completed("quality_checked"):
                         self.log_message.emit("⏭ Bỏ qua: Kiểm tra chất lượng (đã hoàn thành)")

@@ -317,14 +317,15 @@ def generate(
                     progress.update(task, completed=True,
                                   description="[green]Translation complete[/green]")
 
-                    # Step 4b: Quality Check
+                    # Step 4b: Final Quality Verification
+                    # Even after self-check, run a final pass to confirm quality
                     if quality_check and gemini_api_key:
-                        progress.add_task("[cyan]Checking translation quality...", total=None)
+                        progress.add_task("[cyan]Final quality verification...", total=None)
 
                         try:
-                            quality_checker = TranslationQualityChecker(gemini_api_key=gemini_api_key)
+                            if not isinstance(quality_checker, TranslationQualityChecker):
+                                quality_checker = TranslationQualityChecker(gemini_api_key=gemini_api_key)
 
-                            # Prepare segments for quality check
                             check_segments = [
                                 {
                                     "original": seg.text,
@@ -334,7 +335,6 @@ def generate(
                                 for seg in transcription.segments
                             ]
 
-                            # Run batch quality check
                             quality_results = quality_checker.batch_check(
                                 check_segments,
                                 source_language=source_lang,
@@ -342,11 +342,10 @@ def generate(
                                 video_context=video_context
                             )
 
-                            # Count issues
-                            issues_found = 0
-                            for qr in quality_results:
-                                if qr.get("needs_recheck") or not qr.get("is_good", True):
-                                    issues_found += 1
+                            issues_found = sum(
+                                1 for qr in quality_results
+                                if qr.get("needs_recheck") or not qr.get("is_good", True)
+                            )
 
                             if issues_found > 0:
                                 console.print(f"[yellow]⚠ Found {issues_found} segments with potential issues[/yellow]")
