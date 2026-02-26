@@ -1,125 +1,137 @@
-# SubtitleForge Pro — Hướng Dẫn Sử Dụng
+# SubtitleForge Pro — Usage Guide
 
-Ứng dụng tạo subtitle tự động từ video bằng AI. Chỉ cần chọn file phim → hệ thống tự động xử lý → thông báo khi hoàn tất.
+Automatic subtitle generation from video using AI. Simply select a video file → the system processes it automatically → notifies you when complete.
 
 ---
 
-## 1. Cài đặt
+## 1. Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-> **Yêu cầu:** Python 3.10+, FFmpeg đã cài trong PATH, GPU NVIDIA (tuỳ chọn, để tăng tốc).
+> **Requirements:** Python 3.10+, FFmpeg installed and available in PATH, NVIDIA GPU (optional, for acceleration).
 
 ---
 
-## 2. Khởi chạy ứng dụng
+## 2. Launch the Application
 
 ```bash
 python src/gui.py
 ```
 
-Cửa sổ **SubtitleForge Pro** sẽ hiện ra.
+The **SubtitleForge Pro** window will appear.
 
 ---
 
-## 3. Các bước sử dụng
+## 3. Step-by-Step Usage
 
-### Bước 1: Nhập Gemini API Key
+### Step 1: Enter Gemini API Key
 
-Nhập API key vào ô **"Gemini API Key"** ở phần **🔑 Cấu hình API**.
+Enter your API key in the **"Gemini API Key"** field under **🔑 API Configuration**.
 
-> 💡 Lấy API key miễn phí tại: [Google AI Studio](https://aistudio.google.com/app/apikey)
+> 💡 Get a free API key at: [Google AI Studio](https://aistudio.google.com/app/apikey)
 
-### Bước 2: Chọn file video
+### Step 2: Select Video File
 
-Nhấn nút **📂 Browse** → chọn file phim (MP4, MKV, AVI, MOV, tối đa 20GB).
+Click **📂 Browse** → select your video file (MP4, MKV, AVI, MOV, up to 20GB).
 
-Thông tin file (tên, dung lượng) sẽ hiển thị bên dưới.
+File information (name, size) will be displayed below.
 
-### Bước 3: Cấu hình (tuỳ chọn)
+### Step 3: Configuration (Optional)
 
-Phần **⚙️ Cài đặt** có các tuỳ chọn sau. Mặc định đã tối ưu, bạn có thể bỏ qua nếu không cần thay đổi:
+The **⚙️ Settings** section has the following options. Defaults are already optimized — you can skip this if no changes are needed:
 
-| Tuỳ chọn | Mặc định | Mô tả |
-|----------|---------|-------|
-| Ngôn ngữ nguồn | Japanese | Ngôn ngữ gốc của phim |
-| Ngôn ngữ đích | Vietnamese | Ngôn ngữ dịch sang |
-| Whisper Model | Small | Model nhận dạng giọng nói (Medium cho chất lượng cao hơn) |
-| Sử dụng GPU | ✅ Bật | Tăng tốc xử lý nếu có card NVIDIA |
-| Dịch theo ngữ cảnh | ✅ Bật | AI phân tích nhân vật, cảnh phim để dịch chính xác hơn |
-| Kiểm tra chất lượng | ✅ Bật | Tự động kiểm tra và sửa lỗi dịch |
-| Ngữ cảnh video | (trống) | Mô tả nội dung phim để dịch tốt hơn |
+| Option | Default | Description |
+|--------|---------|-------------|
+| Source Language | Japanese | Original language of the video |
+| Target Language | Vietnamese | Language to translate into |
+| Whisper Model | Small | Speech recognition model (Medium for higher quality) |
+| Use GPU | ✅ On | Speed up processing with NVIDIA GPU |
+| Context-Aware Translation | ✅ On | AI analyzes characters and scenes for more accurate translation |
+| Quality Check | ✅ On | Automatically verify and fix translation errors |
+| Video Context | (empty) | Describe video content for better translation |
 
-**Gợi ý ngữ cảnh video:**
-- `Phim anime gia đình, mẹ và con trai nói chuyện`
-- `J-Drama văn phòng, đồng nghiệp cùng công ty`
-- `Phim hành động, nhóm cảnh sát điều tra`
+**Video context suggestions:**
+- `Family anime, mother and son conversation`
+- `Office J-Drama, coworkers at the same company`
+- `Action movie, police investigation team`
 
-### Bước 4: Bắt đầu xử lý
+### Step 4: Start Processing
 
-Nhấn nút **🚀 Bắt Đầu Xử Lý**. Hệ thống sẽ tự động chạy qua 5 giai đoạn:
-
-```
-1. Trích xuất audio    → Tách âm thanh từ video
-2. Transcribe          → Nhận dạng giọng nói thành text (Whisper AI)
-3. Dịch thuật          → Dịch subtitle sang tiếng Việt (Gemini AI)
-4. Kiểm tra chất lượng → Tự sửa lỗi dịch sai nghĩa, xưng hô
-5. Lưu file            → Xuất file subtitle (SRT + VTT + ASS)
-```
-
-Theo dõi tiến trình qua:
-- **Thanh progress** — phần trăm hoàn thành
-- **Trạng thái** — giai đoạn đang chạy
-- **Log** — chi tiết từng bước
-
-### Bước 5: Nhận kết quả
-
-Khi hoàn tất, ứng dụng sẽ hiện thông báo **"Xử lý hoàn tất!"**.
-
-File subtitle được lưu cùng thư mục với video:
+Click **🚀 Start Processing**. The system will automatically run through 5 stages:
 
 ```
-📁 Thư mục video/
-├── movie.srt    ← SubRip (phổ biến nhất)
-├── movie.vtt    ← WebVTT (dùng cho web)
-└── movie.ass    ← ASS (có styling)
+1. Audio Extraction    → Extract audio from video
+2. Transcription       → Speech-to-text recognition (Whisper AI)
+3. Translation         → Translate subtitles to target language (Gemini AI)
+4. Quality Check       → Auto-fix mistranslations, pronoun errors
+5. Save Files          → Export subtitle files (SRT + VTT + ASS)
+```
+
+Monitor progress via:
+- **Progress bar** — completion percentage
+- **Status** — current stage
+- **Log** — detailed step-by-step output
+
+### Step 5: Get Results
+
+When complete, the app will show **"Processing complete!"**.
+
+Subtitle files are saved in the same directory as the video:
+
+```
+📁 Video directory/
+├── movie.srt    ← SubRip (most common)
+├── movie.vtt    ← WebVTT (for web)
+└── movie.ass    ← ASS (with styling)
 ```
 
 ---
 
-## 4. Chọn Whisper Model
+## 4. Choosing a Whisper Model
 
-| Model | VRAM | Tốc độ | Chất lượng | Khi nào dùng |
-|-------|------|--------|-----------|-------------|
-| Tiny | ~1GB | Rất nhanh | Thấp | Test nhanh |
-| Small | ~2GB | Vừa | Tốt | Mặc định, đủ dùng |
-| Medium | ~5GB | Chậm | Rất tốt | Phim Nhật phức tạp |
-| Large | ~10GB | Rất chậm | Xuất sắc | Chất lượng cao nhất |
-
----
-
-## 5. Cơ chế kiểm tra chất lượng (tự động)
-
-Khi bật **"Kiểm tra chất lượng bản dịch"**, hệ thống tự động:
-
-1. **Phân tích nhân vật** — nhận diện speakers, xác định giọng điệu
-2. **Phát hiện cảnh** — chia phim thành các cảnh dựa trên khoảng lặng
-3. **Dịch thông minh** — prompt kèm thông tin nhân vật + cảnh
-4. **Kiểm tra batch** — check 20 câu/lần (nhanh, tiết kiệm API)
-5. **Kiểm tra nhất quán** — xưng hô, tên riêng nhất quán cả phim
-6. **Tự sửa lỗi** — re-translate câu lỗi kèm feedback cụ thể
+| Model | VRAM | Speed | Quality | When to Use |
+|-------|------|-------|---------|-------------|
+| Tiny | ~1GB | Very fast | Low | Quick testing |
+| Small | ~2GB | Moderate | Good | Default, sufficient for most use |
+| Medium | ~5GB | Slow | Very good | Complex Japanese audio |
+| Large | ~10GB | Very slow | Excellent | Highest quality |
 
 ---
 
-## 6. Xử lý sự cố
+## 5. Quality Check System (Automatic)
 
-| Vấn đề | Cách xử lý |
-|--------|-----------|
-| Báo thiếu FFmpeg | Cài FFmpeg và thêm vào PATH |
-| Lỗi GPU / CUDA | Bỏ tick "Sử dụng GPU", dùng CPU |
-| Dịch chậm | Chuyển Whisper Model về Small |
-| Lỗi API key | Kiểm tra key tại [Google AI Studio](https://aistudio.google.com/app/apikey) |
-| File quá lớn | Giới hạn 20GB, nên dùng file dưới 10GB |
-| Muốn hủy giữa chừng | Nhấn nút **⏹ Hủy** |
+When **"Quality Check"** is enabled, the system automatically:
+
+1. **Character Analysis** — identifies speakers and determines tone
+2. **Scene Detection** — splits video into scenes based on silence gaps
+3. **Smart Translation** — prompts include character + scene information
+4. **Batch Quality Check** — verifies 50 segments per API call (fast, cost-effective)
+5. **Coherence Check** — ensures consistent pronouns and names throughout
+6. **Auto-Correction** — re-translates erroneous segments with specific feedback
+7. **Final Verification** — second quality pass to confirm all fixes are correct
+
+---
+
+## 6. Translation Performance
+
+| Setting | Value |
+|---------|-------|
+| Batch size | 50 segments per API call |
+| Rate limiting | Adaptive (0.15s base, auto-throttle on 429) |
+| Quality check | 50 segments per check batch |
+| Checkpoint | Auto-save every 50 translated segments |
+
+---
+
+## 7. Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| FFmpeg not found | Install FFmpeg and add to PATH |
+| GPU / CUDA error | Uncheck "Use GPU", run on CPU |
+| Slow translation | Switch Whisper Model to Small |
+| API key error | Verify key at [Google AI Studio](https://aistudio.google.com/app/apikey) |
+| File too large | Limit is 20GB, recommended under 10GB |
+| Want to cancel mid-process | Click **⏹ Cancel** button |

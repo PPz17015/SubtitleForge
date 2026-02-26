@@ -139,17 +139,17 @@ python -m src.main info
 
 ### Translation Speed
 
-- **Batch size**: 40 segments per API call
+- **Batch size**: 50 segments per API call
 - **Quality check**: 50 segments per check
-- **Rate limiting**: Adaptive (1s base, auto-throttle on 429)
+- **Rate limiting**: Adaptive (0.15s base, auto-throttle on 429)
 - **Checkpoint**: Auto-save every 50 translated segments
 
 **Benchmarks** (1266 segments, Gemini 2.5 Flash):
 
 | Quality Check | API Calls | Estimated Time |
 |--------------|-----------|----------------|
-| ✅ On | ~104 | ~25-30 min |
-| ❌ Off | ~33 | ~8-10 min |
+| ✅ On | ~104 | ~10-15 min |
+| ❌ Off | ~26 | ~3-5 min |
 
 ### GPU vs CPU
 
